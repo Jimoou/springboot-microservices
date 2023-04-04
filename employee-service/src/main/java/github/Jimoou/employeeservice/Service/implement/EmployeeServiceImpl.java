@@ -2,6 +2,7 @@ package github.Jimoou.employeeservice.Service.implement;
 
 import github.Jimoou.employeeservice.DTO.EmployeeDto;
 import github.Jimoou.employeeservice.Entity.Employee;
+import github.Jimoou.employeeservice.Exception.ResourceNotFoundException;
 import github.Jimoou.employeeservice.Repository.EmployeeRepository;
 import github.Jimoou.employeeservice.Service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
   @Override
   public EmployeeDto getEmployeeById(Long employeeId) {
-    Employee employee = employeeRepository.findById(employeeId).get();
+    Employee employee =
+        employeeRepository
+            .findById(employeeId)
+            .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", employeeId));
 
     EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
 

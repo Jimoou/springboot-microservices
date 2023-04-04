@@ -2,6 +2,7 @@ package github.Jimoou.departmentservice.Service.implement;
 
 import github.Jimoou.departmentservice.DTO.DepartmentDto;
 import github.Jimoou.departmentservice.Entity.Department;
+import github.Jimoou.departmentservice.Exception.ResourceNotFoundException;
 import github.Jimoou.departmentservice.Repository.DepartmentRepository;
 import github.Jimoou.departmentservice.Service.DepartmentService;
 import lombok.AllArgsConstructor;
@@ -27,9 +28,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
   @Override
   public DepartmentDto getDepartmentByCode(String departmentCode) {
-
-    Department department = departmentRepository.findByDepartmentCode(departmentCode);
-
+    Department department =
+        departmentRepository
+            .findByDepartmentCode(departmentCode)
+            .orElseThrow(
+                () ->
+                    new ResourceNotFoundException("Department", "Department-Code", departmentCode));
     DepartmentDto departmentDto = modelMapper.map(department, DepartmentDto.class);
 
     return departmentDto;
