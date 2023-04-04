@@ -6,20 +6,18 @@ import github.Jimoou.employeeservice.DTO.EmployeeDto;
 import github.Jimoou.employeeservice.Entity.Employee;
 import github.Jimoou.employeeservice.Exception.ResourceNotFoundException;
 import github.Jimoou.employeeservice.Repository.EmployeeRepository;
+import github.Jimoou.employeeservice.Service.APIClient;
 import github.Jimoou.employeeservice.Service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
   private EmployeeRepository employeeRepository;
-
-  private RestTemplate restTemplate;
   private ModelMapper modelMapper;
+  private APIClient apiClient;
 
   @Override
   public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -38,12 +36,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository
             .findById(employeeId)
             .orElseThrow(() -> new ResourceNotFoundException("Employee", "id", employeeId));
-    ResponseEntity<DepartmentDto> responseEntity =
-        restTemplate.getForEntity(
-            "http://localhost:8080/api/departments/" + employee.getDepartmentCode(),
-            DepartmentDto.class);
 
-    DepartmentDto departmentDto = responseEntity.getBody();
+    DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
     EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
     APIResponseDto apiResponseDto = new APIResponseDto(employeeDto, departmentDto);
