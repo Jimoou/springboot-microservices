@@ -1,5 +1,6 @@
 package github.Jimoou.employeeservice.Controller;
 
+import github.Jimoou.employeeservice.DTO.APIResponseDto;
 import github.Jimoou.employeeservice.DTO.EmployeeDto;
 import github.Jimoou.employeeservice.Service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,8 +32,8 @@ public class EmployeeController {
 
   @Operation(summary = "Get 직원")
   @GetMapping("{id}")
-  public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("id") Long employeeId) {
-    EmployeeDto employeeDto = employeeService.getEmployeeById(employeeId);
+  public ResponseEntity<APIResponseDto> getEmployee(@PathVariable("id") Long employeeId) {
+    APIResponseDto employeeDto = employeeService.getEmployeeById(employeeId);
     return new ResponseEntity<>(employeeDto, HttpStatus.OK);
   }
 }
