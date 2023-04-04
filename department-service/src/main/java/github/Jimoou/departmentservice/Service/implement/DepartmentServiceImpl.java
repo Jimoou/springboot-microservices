@@ -5,26 +5,22 @@ import github.Jimoou.departmentservice.Entity.Department;
 import github.Jimoou.departmentservice.Repository.DepartmentRepository;
 import github.Jimoou.departmentservice.Service.DepartmentService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
   private DepartmentRepository departmentRepository;
+  private ModelMapper modelMapper;
 
   @Override
   public DepartmentDto saveDepartment(DepartmentDto departmentDto) {
-    // 부서 DTO 개체를 부서 JPA 엔터티로 변환
-    Department department =
-        new Department(
-            departmentDto.getId(),
-            departmentDto.getDepartmentName(),
-            departmentDto.getDepartmentDescription(),
-            departmentDto.getDepartmentCode());
+    Department department = modelMapper.map(departmentDto, Department.class);
 
     Department savedDepartment = departmentRepository.save(department);
 
-    DepartmentDto savedDepartmentDto = departmentToConvertDto(savedDepartment);
+    DepartmentDto savedDepartmentDto = modelMapper.map(savedDepartment, DepartmentDto.class);
 
     return savedDepartmentDto;
   }
@@ -34,19 +30,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     Department department = departmentRepository.findByDepartmentCode(departmentCode);
 
-    DepartmentDto departmentDto = departmentToConvertDto(department);
-
-    return null;
-  }
-
-  @Override
-  public DepartmentDto departmentToConvertDto(Department department) {
-    DepartmentDto departmentDto =
-     new DepartmentDto(
-      department.getId(),
-      department.getDepartmentName(),
-      department.getDepartmentDescription(),
-      department.getDepartmentCode());
+    DepartmentDto departmentDto = modelMapper.map(department, DepartmentDto.class);
 
     return departmentDto;
   }
