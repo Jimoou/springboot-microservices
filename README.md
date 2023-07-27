@@ -17,7 +17,7 @@
 - 마이크로서비스 간의 장애 전파 방지 (Resilience4J: Circuit Breaker 패턴 사용)
 - React 기반 프론트엔드 마이크로서비스 개발 및 백엔드 마이크로서비스와의 통합
 
-## 프로젝트 구조
+## MicroServices
 
 ### [service-registry](https://github.com/Jimoou/springboot-microservices/tree/main/service-registry)
 
@@ -45,7 +45,7 @@ React(Typescript) 기반의 프론트엔드 마이크로서비스로, 사용자 
 
 ### [api-gateway](https://github.com/Jimoou/springboot-microservices/tree/main/api-gateway)
 
-API 게이트웨이는 클라이언트와 마이크로서비스 간의 통신을 중계하는 역할을 합니다. 이 프로젝트에서는 Spring Cloud Gateway를 사용하여 API 게이트웨이를 구현합니다. 또한, Eureka 서버와 Spring Cloud LoadBalancer를 사용하여 로드 밸런싱을 지원하며, Resilience4J를 사용하여 Circuit Breaker 패턴을 구현하여 마이크로서비스 간의 장애
+API 게이트웨이는 클라이언트와 마이크로서비스 간의 통신을 중계하는 역할을 합니다. 이 프로젝트에서는 Spring Cloud Gateway를 사용하여 API 게이트웨이를 구현합니다. 또한, Eureka 서버와 Spring Cloud LoadBalancer를 사용하여 로드 밸런싱을 지원하며, Resilience4J를 사용하여 Circuit Breaker 패턴을 구현하여 마이크로서비스 간의 장애 전파를 방지합니다.
 
 ## 작동 과정
 
@@ -73,7 +73,6 @@ API 게이트웨이를 통해 전달되는 요청은 Spring Cloud LoadBalancer�
 
 - **사용 이유**: 시스템의 부하를 분산시키고 서비스의 가용성을 향상시키기 위해 로드 밸런싱이 필요합니다.
 - **효과**: 로드 밸런서를 사용하면 전체 시스템의 부하를 균등하게 분산시킬 수 있으며, 서비스의 가용성과 내구성이 향상됩니다.
-- **예시**: Employee 서비스가 부하가 많아져 다수의 인스턴스로 확장되었을 때, Spring Cloud LoadBalancer를 사용하여 요청을 여러 인스턴스에 분산시킬 수 있습니다.
 
 ### Spring Cloud Gateway : API 게이트웨이 생성
 
@@ -84,7 +83,6 @@ API 게이트웨이를 통해 전달되는 요청은 Spring Cloud LoadBalancer�
 
 - **사용 이유**: 마이크로서비스 환경에서 중앙 집중식으로 구성을 관리하면 유지 보수가 용이해집니다. Spring Cloud Config Server는 이러한 목적으로 사용됩니다.
 - **효과**: Config Server를 사용하면 모든 서비스의 구성을 한 곳에서 관리할 수 있으며, 변경 사항이 적용되기 위해 서비스를 재시작할 필요가 없습니다. 이를 통해 유지 보수 및 구성 변경이 쉬워집니다.
-- **예시**: 여러 서비스가 공통된 데이터베이스 접속 정보를 사용하는 경우, 이 정보를 Config Server에 저장하고 서비스들이 이를 사용할 수 있게 합니다. 데이터베이스 접속 정보가 변경되면, 변경된 정보를 Config Server에서만 수정하면 됩니다.
 
 ### Spring Cloud Bus, RabbitMQ : 설정 변경 자동 갱신
 
